@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+
+<html lang="en" ng-app="confusionApp">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head
+         content must come *after* these tags -->
+    <title>Ristorante Con Fusion: Menu</title>
+    <!-- Bootstrap -->
+    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../bower_components/bootstrap/dist/css/bootstrap-theme.min.css" rel="stylesheet">
+    <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet">
+    <link href="styles/bootstrap-social.css" rel="stylesheet">
+    <link href="styles/mystyles.css" rel="stylesheet">
+
+<body>
+
+<div class="container">
+    <div class="row" ng-controller="DishDetailController">
+        <div class="col-xs-12">
+            <div class="media">
+                <div class="media-left media-middle">
+                    <img class="media-object img-thumbnail" ng-src={{dish.image}}>
+                </div>
+                <div class="media-body">
+                    <h2 class="media-heading">{{dish.name}}
+                        <span class="label label-danger">{{dish.label}}</span>
+                        <span class="badge">{{dish.price | currency}}</span>
+                    </h2>
+                    <p>{{dish.description}}</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-xs-9 col-xs-offset-2">
+
+            <h4>Customer Comments</h4>
+            Sort by: <input type="text" ng-model="userInput">
+            {{userInput}}
+
+
+            <ul class="list-unstyled">
+                <li ng-repeat="comment in dish.comments | orderBy: userInput">
+                    <blockquote>
+                        {{comment.rating}} Stars
+                        <p>{{comment.comment}}</p>
+                        <footer>{{comment.author}}, {{comment.date | date}}</footer>
+                    </blockquote>
+                </li>
+            </ul>
+
+            <blockquote ng-show="commentForm.$valid && commentForm.$dirty">
+                {{userComment.rating}} Stars
+                <p>{{userComment.comment}}</p>
+                <footer>{{userComment.author}}</footer>
+            </blockquote>
+            <form class="form-horizontal" role="form" name="commentForm" novalidate>
+                <div ng class="form-group" ng-class="{'has-error' : commentForm.author.$error.required &&
+                !commentForm.author.$pristine }">
+
+                    <label class="control-label col-sm-2" for="author">Your name</label>
+                    <div class="col-sm-10">
+                        <input ng-model="userComment.author" name="author" id="author" type="text"
+                               class="form-control" placeholder="Enter Your Name" required>
+                        <span ng-show="commentForm.author.$error.required
+                            && !commentForm.author.$pristine" class="help-block">
+                                Your name is required.
+                            </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="rating">Namber of Stars</label>
+                    <div class="col-sm-10">
+                        <div class="row">
+                            <div class="col-sm-1"><input type="radio" name="rating" ng-model="userComment.rating"
+                                                         value="1">1
+                            </div>
+                            <div class="col-sm-1"><input type="radio" name="rating" ng-model="userComment.rating"
+                                                         value="2">2
+                            </div>
+                            <div class="col-sm-1"><input type="radio" name="rating" ng-model="userComment.rating"
+                                                         value="3">3
+                            </div>
+                            <div class="col-sm-1"><input type="radio" name="rating" ng-model="userComment.rating"
+                                                         value="4">4
+                            </div>
+                            <div class="col-sm-1"><input type="radio" name="rating" ng-model="userComment.rating"
+                                                         value="5">5
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group" ng-class="{'has-error' : commentForm.comment.$error.required &&
+                !commentForm.comment.$pristine }">
+                    <label class="control-label col-sm-2" for="comment">Your comments</label>
+                    <div class="col-sm-10">
+                        <textarea class="form-control" name="comment" rows="5"
+                                  ng-model="userComment.comment"
+                                  id="comment" required></textarea>
+                        <span ng-show="commentForm.comment.$error.required
+                            && !commentForm.comment.$pristine" class="help-block">
+                                Your comment is required.
+                            </span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button ng-click="submit()" class="btn btn-primary" type="submit"
+                                ng-disabled="commentForm.$invalid">Summit comments
+                        </button>
+
+                    </div>
+                </div>
+
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+</div>
+
+<script src="../bower_components/angular/angular.min.js"></script>
+<script>
+
+    angular.module('confusionApp', [])
+            .controller('DishDetailController', ['$scope', function ($scope) {
+
+                $scope.dish = {
+                    name: 'Uthapizza',
+                    image: 'images/uthapizza.png',
+                    category: 'mains',
+                    label: 'Hot',
+                    price: '4.99',
+                    description: 'A unique combination of Indian Uthappam (pancake) and Italian pizza, topped with Cerignola olives, ripe vine cherry tomatoes, Vidalia onion, Guntur chillies and Buffalo Paneer.',
+                    comments: [
+                        {
+                            rating: 5,
+                            comment: "Imagine all the eatables, living in conFusion!",
+                            author: "John Lemon",
+                            date: "2012-10-16T17:57:28.556094Z"
+                        },
+                        {
+                            rating: 4,
+                            comment: "Sends anyone to heaven, I wish I could get my mother-in-law to eat it!",
+                            author: "Paul McVites",
+                            date: "2014-09-05T17:57:28.556094Z"
+                        },
+                        {
+                            rating: 3,
+                            comment: "Eat it, just eat it!",
+                            author: "Michael Jaikishan",
+                            date: "2015-02-13T17:57:28.556094Z"
+                        },
+                        {
+                            rating: 4,
+                            comment: "Ultimate, Reaching for the stars!",
+                            author: "Ringo Starry",
+                            date: "2013-12-02T17:57:28.556094Z"
+                        },
+                        {
+                            rating: 2,
+                            comment: "It's your birthday, we're gonna party!",
+                            author: "25 Cent",
+                            date: "2011-12-02T17:57:28.556094Z"
+                        }
+
+                    ]
+                };
+
+                $scope.userComment = {
+                    rating: "5",
+                    comment: "",
+                    author: "",
+                    date: ""
+
+                };
+
+                $scope.submit = function () {
+                    $scope.userComment.date = new Date(); // add property date
+                    //console.log($scope.userComment);
+                    var starInt= parseInt($scope.userComment.rating);
+                    $scope.userComment.rating = starInt;
+                    $scope.userComentClone = angular.copy($scope.userComment); // save current comment to var
+                    $scope.dish.comments.push($scope.userComentClone); // add to array to the and current comment
+                    //console.log($scope.dish.comments);
+                    $scope.reset = function(){
+                        $scope.userComment = {
+                            rating: "5",
+                            comment: "",
+                            author: "",
+                            date: ""
+
+                        }
+                    };
+                    $scope.reset();
+                    $scope.commentForm.$setPristine();
+
+                };
+
+
+            }])
+
+    ;
+</script>
+
+
+</body>
+</html>
