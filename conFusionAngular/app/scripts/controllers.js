@@ -73,31 +73,48 @@ angular.module('confusionApp')
 
     .controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory',
         function ($scope, $stateParams, menuFactory) {
-            var dish= menuFactory.getDish(parseInt($stateParams.id,10));
-            $scope.dish = dish;
-        $scope.userComment = {
-            rating: "5",
-            comment: "",
-            author: "",
-            date: ""
-        };
-        $scope.submit = function () {
-            $scope.userComment.date = new Date(); // add property date
-            //console.log($scope.userComment);
-            $scope.userComment.rating = parseInt($scope.userComment.rating);
-            $scope.userComentClone = angular.copy($scope.userComment); // save current comment to var
-            $scope.dish.comments.push($scope.userComentClone); // add to array to the and current comment
-            //console.log($scope.dish.comments);
-            $scope.reset = function () {
-                $scope.userComment = {
-                    rating: "5",
-                    comment: "",
-                    author: "",
-                    date: ""
-                }
+
+            $scope.dish = menuFactory.getDish(parseInt($stateParams.id, 10));
+
+           // $scope.dishFirst = menuFactory.getDish(0);
+
+            $scope.userComment = {
+                rating: "5",
+                comment: "",
+                author: "",
+                date: ""
             };
-            $scope.reset();
-            $scope.commentForm.$setPristine();
-        };
-    }])
+            $scope.submit = function () {
+                $scope.userComment.date = new Date(); // add property date
+                //console.log($scope.userComment);
+                $scope.userComment.rating = parseInt($scope.userComment.rating);
+                $scope.userComentClone = angular.copy($scope.userComment); // save current comment to var
+                $scope.dish.comments.push($scope.userComentClone); // add to array to the and current comment
+                //console.log($scope.dish.comments);
+                $scope.reset = function () {
+                    $scope.userComment = {
+                        rating: "5",
+                        comment: "",
+                        author: "",
+                        date: ""
+                    }
+                };
+                $scope.reset();
+                $scope.commentForm.$setPristine();
+            };
+        }])
+
+    .controller('IndexController', ['$scope', '$stateParams', 'menuFactory', 'corporateFactory',
+        function ($scope, $stateParams, menuFactory, corporateFactory) {
+            $scope.promos = menuFactory.getPromotion();
+            $scope.dishes = menuFactory.getDishes();
+            $scope.leader = corporateFactory.getLeader("Executive Chef");
+            console.log("bla");
+        }])
+
+    .controller('AboutController', ['$scope', '$stateParams', 'corporateFactory',
+        function ($scope, $stateParams, corporateFactory) {
+            $scope.corporates = corporateFactory.getLeaders();
+
+        }])
 ;

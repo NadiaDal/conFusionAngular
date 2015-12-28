@@ -7,7 +7,7 @@ angular.module('confusionApp', ['ui.router'])
                 url: '/',
                 views: {
                     'header': {templateUrl: 'views/header.html'},
-                    'content': {template: '<h1>To be</h1>', controller: 'IndexController'},
+                    'content': {templateUrl: 'views/home.html', controller: 'IndexController'},
                     'footer': {templateUrl: 'views/footer.html'}
                 }
             })
@@ -15,7 +15,7 @@ angular.module('confusionApp', ['ui.router'])
             .state('app.aboutus', {
                 url: 'aboutus',
                 views: {
-                    'content@': {template: '<h1>To be</h1>', controller: 'AboutController'}
+                    'content@': {templateUrl: 'views/aboutus.html', controller: 'AboutController'}
                 }
             })
 
